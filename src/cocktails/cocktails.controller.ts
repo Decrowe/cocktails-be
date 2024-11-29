@@ -8,14 +8,14 @@ export class CocktailsController {
   constructor(private readonly cocktailsService: CocktailsService) {}
 
   @Get()
-  findAll(): CocktailDto[] {
+  getCocktails(): CocktailDto[] {
     return this.cocktailsService
-      .findAll()
+      .getAll()
       .map((cocktail) => CocktailMapper.to(cocktail));
   }
 
   @Get(':searchterm')
-  search(@Param('searchterm') searchterm: string): CocktailDto[] {
+  searchCocktails(@Param('searchterm') searchterm: string): CocktailDto[] {
     return this.cocktailsService
       .search(searchterm)
       .map((cocktail) => CocktailMapper.to(cocktail));

@@ -1,6 +1,6 @@
 import { CocktailDto } from 'src/cocktails/dto/cocktail.dto';
 import { Cocktail } from 'src/cocktails/entities/cocktail.entity';
-import { Mapper } from './mapper.base';
+import { Mapper } from 'src/shared/mapper/mapper.base';
 
 export const CocktailMapper: Mapper<CocktailDto, Cocktail> = {
   from(dto: CocktailDto) {

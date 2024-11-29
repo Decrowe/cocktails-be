@@ -49,7 +49,7 @@ export class CocktailsService {
     return allCocktails$;
   }
 
-  findAll(): Cocktail[] {
+  getAll(): Cocktail[] {
     return this._allCocktails;
   }
 
