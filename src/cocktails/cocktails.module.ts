@@ -1,9 +1,11 @@
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { CocktailsService } from './cocktails.service';
 import { CocktailsController } from './cocktails.controller';
+import { CocktailsService } from './cocktails.service';
 
 @Module({
   controllers: [CocktailsController],
-  providers: [CocktailsService]
+  imports: [HttpModule],
+  providers: [CocktailsService],
 })
 export class CocktailsModule {}
