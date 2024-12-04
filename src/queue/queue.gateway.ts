@@ -2,6 +2,8 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
+  
 } from '@nestjs/websockets';
 import { CreateQueueDto } from './dto/create-queue.dto';
 import { UpdateQueueDto } from './dto/update-queue.dto';
@@ -13,7 +15,15 @@ import { QueueService } from './queue.service';
   },
 })
 export class QueueGateway {
-  constructor(private readonly queueService: QueueService) {}
+  @WebSocketServer() server: any
+  intervalId : number | undefined = undefined
+    constructor(private readonly queueService: QueueService) {
+      this.intervalId = setInterval(() => {
+        this.server.emit("test", "TestMessage")
+        console.log("emitting..");
+        
+      }, 1000) as unknown as number;
+    }
 
   @SubscribeMessage('createQueue')
   create(@MessageBody() createQueueDto: CreateQueueDto) {
