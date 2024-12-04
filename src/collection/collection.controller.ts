@@ -7,12 +7,12 @@ export class CollectionController {
   constructor(private readonly collectionService: CollectionService) {}
 
   @Post()
-  create(@Body() collectionDto: CollectionDto) {
+  saveCollection(@Body() collectionDto: CollectionDto) {
     return this.collectionService.save(collectionDto);
   }
 
   @Delete()
-  clear() {
+  clearCollection() {
     return this.collectionService.clear();
   }
 }
