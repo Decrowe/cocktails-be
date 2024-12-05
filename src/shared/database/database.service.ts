@@ -1,18 +1,28 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { catchError, combineLatest, first, map, Observable, of } from 'rxjs';
-import { CocktailDTO } from 'src/cocktails/dto/cocktail.dto';
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  first,
+  map,
+  Observable,
+  of,
+} from 'rxjs';
+import { CocktailDto } from 'src/cocktails/dto/cocktail.dto';
 import { Alphabete } from 'src/cocktails/utils/alphabete';
 import { cocktailApiMapper } from 'src/cocktails/utils/mapper/api/cocktail.api.mapper';
-import { CreateOrderDto } from 'src/orders/dto/create-order.dto';
-import { OrderDTO } from 'src/orders/dto/order.dto';
-import { CompleteOrderDTO } from 'src/queue/dto/complete-order.dto';
+import { OrderDto } from 'src/orders/dto/order.dto';
+import { CompleteOrderDto } from 'src/queue/dto/complete-order.dto';
 import { IDatabaseService } from './database.interface';
 
 @Injectable()
 export class DatabaseService implements IDatabaseService {
-  private allCocktails: CocktailDTO[] = [];
-  orders$: Observable<OrderDTO[]>;
+  private allCocktails: CocktailDto[] = [];
+  private _orders: BehaviorSubject<OrderDto[]> = new BehaviorSubject<
+    OrderDto[]
+  >([]);
+  orders$: Observable<OrderDto[]> = this._orders.asObservable();
 
   constructor(private http: HttpService) {
     this.loadCocktailsInitial();
@@ -28,12 +38,12 @@ export class DatabaseService implements IDatabaseService {
           map((response: any) => response['data']['drinks']),
           map((dtos: any[]) => dtos.map((dto) => cocktailApiMapper(dto))),
           catchError((error) => {
-            return of([] as CocktailDTO[]);
+            return of([] as CocktailDto[]);
           }),
         ),
     );
     const allCocktails$ = combineLatest(allCocktailsRequests).pipe(
-      map((cocktailLists: CocktailDTO[][]) =>
+      map((cocktailLists: CocktailDto[][]) =>
         cocktailLists.reduce((prev, curr) => [...prev, ...curr]),
       ),
     );
@@ -41,15 +51,19 @@ export class DatabaseService implements IDatabaseService {
     allCocktails$.pipe(first()).subscribe({
       next: (cocktails) => {
         this.allCocktails = cocktails;
-        console.log(`Loaded ${cocktails.length} Cocktails!`);
+        console.info(`Loaded ${cocktails.length} Cocktails!`);
       },
     });
   }
 
-  getAllCocktails(): CocktailDTO[] {
+  getCocktailById(id: string): CocktailDto {
+    return this.allCocktails.find((value) => value.id === id);
+  }
+
+  getAllCocktails(): CocktailDto[] {
     return this.allCocktails;
   }
-  searchCocktails(serachterm: string): CocktailDTO[] {
+  searchCocktails(serachterm: string): CocktailDto[] {
     throw new Error('Method not implemented.');
   }
   saveCollection(cocktailIds: string[]): void {
@@ -58,13 +72,20 @@ export class DatabaseService implements IDatabaseService {
   clearCollection(): void {
     throw new Error('Method not implemented.');
   }
-  getCocktailSelection(): CocktailDTO[] {
+  getCocktailSelection(): CocktailDto[] {
     throw new Error('Method not implemented.');
   }
-  addOrder(createOrder: CreateOrderDto): void {
-    throw new Error('Method not implemented.');
+  addOrder(order: OrderDto): void {
+    this._orders.next([...this._orders.value, order]);
   }
-  completeOrder(completeOrder: CompleteOrderDTO): void {
-    throw new Error('Method not implemented.');
+
+  private removeOrderFromQueue(id: string) {
+    const orders = this._orders.value;
+    const removed = orders.filter((order) => order.id !== id);
+    this._orders.next(removed);
+  }
+
+  completeOrder(completeOrder: CompleteOrderDto): void {
+    this.removeOrderFromQueue(completeOrder.id);
   }
 }

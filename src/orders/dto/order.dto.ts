@@ -1,6 +1,6 @@
 import { OrderItemDto } from './order-item.dto';
 
-export class OrderDTO {
+export class OrderDto {
   id: string;
   timestamp: Date;
   orderer: string;

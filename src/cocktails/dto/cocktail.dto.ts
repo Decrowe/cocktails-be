@@ -1,8 +1,8 @@
-import { IngredientDTO } from './ingredient.dto';
+import { IngredientDto } from './ingredient.dto';
 
-export class CocktailDTO {
+export class CocktailDto {
   id: string;
   name: string;
   imgSrc?: string;
-  ingredients: IngredientDTO[];
+  ingredients: IngredientDto[];
 }
