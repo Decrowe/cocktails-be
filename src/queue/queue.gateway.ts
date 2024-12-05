@@ -6,7 +6,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { CompleteOrderDTO } from './dto/complete-order.dto';
+import { CompleteOrderDto } from './dto/complete-order.dto';
 import { Messages } from './dto/message.dto';
 import { QueueService } from './queue.service';
 
@@ -26,15 +26,15 @@ export class QueueGateway implements OnGatewayInit {
   }
 
   listenOnQueue() {
-    this.queueService.queue$.subscribe({
+    this.queueService.orders$.subscribe({
       next: (orders) => {
         this.server.emit(Messages.queueUpdated, orders);
       },
     });
   }
 
-  @SubscribeMessage('completeOrder')
-  update(@MessageBody() completeOrder: CompleteOrderDTO) {
+  @SubscribeMessage(Messages.completeOrder)
+  update(@MessageBody() completeOrder: CompleteOrderDto) {
     return this.queueService.complete(completeOrder);
   }
 }

@@ -1,18 +1,18 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { CocktailsService } from './cocktails.service';
-import { CocktailDTO } from './dto/cocktail.dto';
+import { CocktailDto } from './dto/cocktail.dto';
 
 @Controller('cocktails')
 export class CocktailsController {
   constructor(private readonly cocktailsService: CocktailsService) {}
 
   @Get()
-  findAll(): CocktailDTO[] {
+  findAll(): CocktailDto[] {
     return this.cocktailsService.getAll();
   }
 
   @Get(':searchterm')
-  search(@Param('searchterm') searchterm: string): CocktailDTO[] {
+  search(@Param('searchterm') searchterm: string): CocktailDto[] {
     return this.cocktailsService.search(searchterm);
   }
 }

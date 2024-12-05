@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { DatabaseService } from 'src/shared/database/database.service';
-import { CocktailDTO } from './dto/cocktail.dto';
+import { CocktailDto } from './dto/cocktail.dto';
 
 @Injectable()
 export class CocktailsService {
   constructor(private _db: DatabaseService) {}
 
-  getAll(): CocktailDTO[] {
+  getAll(): CocktailDto[] {
     return this._db.getAllCocktails();
   }
 
-  search(searchterm: string): CocktailDTO[] {
+  search(searchterm: string): CocktailDto[] {
     return this._db
       .getAllCocktails()
       .filter((cocktail) =>
