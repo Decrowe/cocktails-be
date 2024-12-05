@@ -1,18 +1,18 @@
 import { Observable } from 'rxjs';
-import { CocktailDto } from 'src/cocktails/dto/cocktail.dto';
+import { CocktailDTO } from 'src/cocktails/dto/cocktail.dto';
 import { CreateOrderDto } from 'src/orders/dto/create-order.dto';
 import { OrderDTO } from 'src/orders/dto/order.dto';
 import { CompleteOrderDTO } from 'src/queue/dto/complete-order.dto';
 
 export interface IDatabaseService {
-  getAllCocktails(): CocktailDto[];
-  searchCocktails(serachterm: string): CocktailDto[];
+  getAllCocktails(): CocktailDTO[];
+  searchCocktails(serachterm: string): CocktailDTO[];
 
   saveCollection(cocktailIds: string[]): void;
   clearCollection(): void;
-  getCocktailSelection(): CocktailDto[];
+  getCocktailSelection(): CocktailDTO[];
 
   addOrder(createOrder: CreateOrderDto): void;
-  getOrders(): Observable<OrderDTO[]>;
   completeOrder(completeOrder: CompleteOrderDTO): void;
+  orders$: Observable<OrderDTO[]>;
 }

@@ -1,10 +1,8 @@
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Ingredient } from '../entities/ingredient.entity';
+import { IngredientDTO } from './ingredient.dto';
 
-export class CocktailDto {
+export class CocktailDTO {
   id: string;
   name: string;
-  @ApiPropertyOptional()
-  imgSrc: string;
-  ingredients: Ingredient[];
+  imgSrc?: string;
+  ingredients: IngredientDTO[];
 }

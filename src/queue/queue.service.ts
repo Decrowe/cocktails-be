@@ -1,26 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateQueueDto } from './dto/create-queue.dto';
-import { UpdateQueueDto } from './dto/update-queue.dto';
+import { BehaviorSubject } from 'rxjs';
+import { OrderDTO } from 'src/orders/dto/order.dto';
+import { CompleteOrderDTO } from './dto/complete-order.dto';
 
 @Injectable()
 export class QueueService {
-  create(createQueueDto: CreateQueueDto) {
-    return 'This action adds a new queue';
+  private _queue$ = new BehaviorSubject<OrderDTO[]>([]);
+  queue$ = this._queue$.asObservable();
+
+  constructor() {
+    setInterval(() => {
+      const order: OrderDTO = {
+        id: '1',
+        items: [],
+        orderer: 'Lukas',
+        timestamp: new Date(),
+      };
+      this._queue$.next([order]);
+    }, 1000);
   }
 
-  findAll() {
-    return `This action returns all queue`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} queue`;
-  }
-
-  update(id: number, updateQueueDto: UpdateQueueDto) {
-    return `This action updates a #${id} queue`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} queue`;
+  complete(completeOrder: CompleteOrderDTO) {
+    throw new Error('Method not implemented.');
   }
 }

@@ -1,7 +1,7 @@
-import { Ingredient } from 'src/cocktails/entities/ingredient.entity';
+import { IngredientDTO } from 'src/cocktails/dto/ingredient.dto';
 
-export function ingredientApiMapper(dto: any): Ingredient[] {
-  const ingredients: Ingredient[] = [];
+export function ingredientApiMapper(dto: any): IngredientDTO[] {
+  const ingredients: IngredientDTO[] = [];
 
   const measurePrefix = 'strMeasure';
   const ingredientPrefix = 'strIngredient';

@@ -1,10 +1,13 @@
 import {
   MessageBody,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { CreateQueueDto } from './dto/create-queue.dto';
-import { UpdateQueueDto } from './dto/update-queue.dto';
+import { Server } from 'socket.io';
+import { CompleteOrderDTO } from './dto/complete-order.dto';
+import { Messages } from './dto/message.dto';
 import { QueueService } from './queue.service';
 
 @WebSocketGateway({
@@ -12,31 +15,26 @@ import { QueueService } from './queue.service';
     origin: '*',
   },
 })
-export class QueueGateway {
+export class QueueGateway implements OnGatewayInit {
+  @WebSocketServer() server: Server;
+
   constructor(private readonly queueService: QueueService) {}
 
-  @SubscribeMessage('createQueue')
-  create(@MessageBody() createQueueDto: CreateQueueDto) {
-    return this.queueService.create(createQueueDto);
+  afterInit(server: Server) {
+    this.server = server;
+    this.listenOnQueue();
   }
 
-  @SubscribeMessage('findAllQueue')
-  findAll() {
-    return this.queueService.findAll();
+  listenOnQueue() {
+    this.queueService.queue$.subscribe({
+      next: (orders) => {
+        this.server.emit(Messages.queueUpdated, orders);
+      },
+    });
   }
 
-  @SubscribeMessage('findOneQueue')
-  findOne(@MessageBody() id: number) {
-    return this.queueService.findOne(id);
-  }
-
-  @SubscribeMessage('updateQueue')
-  update(@MessageBody() updateQueueDto: UpdateQueueDto) {
-    return this.queueService.update(updateQueueDto.id, updateQueueDto);
-  }
-
-  @SubscribeMessage('removeQueue')
-  remove(@MessageBody() id: number) {
-    return this.queueService.remove(id);
+  @SubscribeMessage('completeOrder')
+  update(@MessageBody() completeOrder: CompleteOrderDTO) {
+    return this.queueService.complete(completeOrder);
   }
 }
