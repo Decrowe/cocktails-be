@@ -1,6 +1,6 @@
-import { OrderItemDto } from './order.dto';
+import { CreateOrderItemDto } from './create-order-item.dto';
 
 export class CreateOrderDto {
   orderer: string;
-  orderitems: OrderItemDto[];
+  items: CreateOrderItemDto[];
 }
