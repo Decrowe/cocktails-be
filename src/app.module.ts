@@ -7,6 +7,6 @@ import { QueueModule } from './queue/queue.module';
 @Module({
   imports: [CocktailsModule, QueueModule, CollectionModule, OrdersModule],
   controllers: [],
-  providers: [],
+  exports: [],
 })
 export class AppModule {}

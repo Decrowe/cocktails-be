@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { QueueService } from './queue.service';
+import { DatabaseModule } from 'src/shared/database/database.module';
 import { QueueGateway } from './queue.gateway';
+import { QueueService } from './queue.service';
 
 @Module({
-  providers: [QueueGateway, QueueService]
+  providers: [QueueGateway, QueueService],
+  imports: [DatabaseModule],
 })
 export class QueueModule {}
