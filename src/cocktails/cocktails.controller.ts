@@ -7,8 +7,12 @@ export class CocktailsController {
   constructor(private readonly cocktailsService: CocktailsService) {}
 
   @Get()
-  findAll(): CocktailDto[] {
+  getAll(): CocktailDto[] {
     return this.cocktailsService.getAll();
+  }
+  @Get('/card')
+  getCard(): CocktailDto[] {
+    return this.cocktailsService.getCard();
   }
 
   @Get(':searchterm')

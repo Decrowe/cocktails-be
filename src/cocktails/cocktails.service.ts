@@ -10,6 +10,10 @@ export class CocktailsService {
     return this._db.getAllCocktails();
   }
 
+  getCard(): CocktailDto[] {
+    return this._db.getCocktailCard();
+  }
+
   search(searchterm: string): CocktailDto[] {
     return this._db
       .getAllCocktails()
