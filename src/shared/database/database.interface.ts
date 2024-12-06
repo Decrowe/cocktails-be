@@ -5,12 +5,12 @@ import { CompleteOrderDto } from 'src/queue/dto/complete-order.dto';
 
 export interface IDatabaseService {
   getAllCocktails(): CocktailDto[];
+  getCocktailCard(): CocktailDto[];
   getCocktailById(id: string): CocktailDto;
-  searchCocktails(serachterm: string): CocktailDto[];
+  searchCocktails(searchterm: string): CocktailDto[];
 
-  saveCollection(cocktailIds: string[]): void;
-  clearCollection(): void;
-  getCocktailSelection(): CocktailDto[];
+  saveCard(cocktailIds: string[]): void;
+  clearCard(): void;
 
   addOrder(order: OrderDto): void;
   completeOrder(completeOrder: CompleteOrderDto): void;

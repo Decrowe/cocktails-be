@@ -19,6 +19,7 @@ import { IDatabaseService } from './database.interface';
 @Injectable()
 export class DatabaseService implements IDatabaseService {
   private allCocktails: CocktailDto[] = [];
+  private _cocktailCard: string[] = [];
   private _orders: BehaviorSubject<OrderDto[]> = new BehaviorSubject<
     OrderDto[]
   >([]);
@@ -63,17 +64,24 @@ export class DatabaseService implements IDatabaseService {
   getAllCocktails(): CocktailDto[] {
     return this.allCocktails;
   }
-  searchCocktails(serachterm: string): CocktailDto[] {
-    throw new Error('Method not implemented.');
+  getCocktailCard(): CocktailDto[] {
+    return this.allCocktails.filter((cocktail) =>
+      this._cocktailCard.includes(cocktail.id),
+    );
   }
-  saveCollection(cocktailIds: string[]): void {
-    throw new Error('Method not implemented.');
+  searchCocktails(searchterm: string): CocktailDto[] {
+    return this.allCocktails.filter((cocktail) =>
+      cocktail.name
+        .replaceAll(' ', '')
+        .toUpperCase()
+        .includes(searchterm.replaceAll(' ', '').toUpperCase()),
+    );
   }
-  clearCollection(): void {
-    throw new Error('Method not implemented.');
+  saveCard(cocktailIds: string[]): void {
+    this._cocktailCard = cocktailIds;
   }
-  getCocktailSelection(): CocktailDto[] {
-    throw new Error('Method not implemented.');
+  clearCard(): void {
+    this._cocktailCard = [];
   }
   addOrder(order: OrderDto): void {
     this._orders.next([...this._orders.value, order]);
