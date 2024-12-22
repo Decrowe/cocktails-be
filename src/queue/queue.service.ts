@@ -10,4 +10,8 @@ export class QueueService {
   complete(completeOrder: CompleteOrderDto) {
     this._databaseService.completeOrder(completeOrder);
   }
+
+  getCurrent() {
+    return this._databaseService.getCurrent();
+  }
 }

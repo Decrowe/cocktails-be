@@ -96,4 +96,8 @@ export class DatabaseService implements IDatabaseService {
   completeOrder(completeOrder: CompleteOrderDto): void {
     this.removeOrderFromQueue(completeOrder.id);
   }
+
+  getCurrent() {
+    return this._orders.getValue();
+  }
 }

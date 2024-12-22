@@ -1,4 +1,5 @@
 export const Messages = {
+  getCurrent: 'getCurrent',
   queueUpdated: 'queueUpdated',
   completeOrder: 'completeOrder',
 } as const;

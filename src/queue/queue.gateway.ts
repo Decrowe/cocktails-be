@@ -37,4 +37,9 @@ export class QueueGateway implements OnGatewayInit {
   update(@MessageBody() completeOrder: CompleteOrderDto) {
     return this.queueService.complete(completeOrder);
   }
+  @SubscribeMessage(Messages.getCurrent)
+  getCurrent() {
+    const current = this.queueService.getCurrent();
+    this.server.emit(Messages.getCurrent, current);
+  }
 }
